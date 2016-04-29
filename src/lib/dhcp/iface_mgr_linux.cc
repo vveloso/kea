@@ -37,13 +37,34 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <net/if.h>
-#include <linux/rtnetlink.h>
 
 using namespace std;
 using namespace isc;
 using namespace isc::asiolink;
 using namespace isc::dhcp;
 using namespace isc::util::io::internal;
+
+#if defined(__CYGWIN__)
+
+namespace isc {
+namespace dhcp {
+
+void
+IfaceMgr::detectIfaces() {
+	stubDetectIfaces();
+}
+
+void
+IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired) {
+	setPacketFilter(PktFilterPtr(new PktFilterInet()));
+}
+
+} // end of isc::dhcp namespace
+} // end of isc namespace
+
+#else
+
+#include <linux/rtnetlink.h>
 
 BOOST_STATIC_ASSERT(IFLA_MAX>=IFA_MAX);
 
@@ -520,6 +541,14 @@ IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired) {
 
     }
 }
+
+} // end of isc::dhcp namespace
+} // end of isc namespace
+
+#endif // #if defined(__CYGWIN__)
+
+namespace isc {
+namespace dhcp {
 
 bool
 IfaceMgr::openMulticastSocket(Iface& iface,

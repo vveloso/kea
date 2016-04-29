@@ -4,6 +4,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifndef __CYGWIN__
+
 #include <config.h>
 #include <dhcp/dhcp4.h>
 #include <dhcp/iface_mgr.h>
@@ -325,3 +327,5 @@ PktFilterLPF::send(const Iface& iface, uint16_t sockfd, const Pkt4Ptr& pkt) {
 
 } // end of isc::dhcp namespace
 } // end of isc namespace
+
+#endif // #ifndef __CYGWIN__

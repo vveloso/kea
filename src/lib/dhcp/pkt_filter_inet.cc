@@ -237,7 +237,9 @@ PktFilterInet::send(const Iface&, uint16_t sockfd,
     struct in_pktinfo* pktinfo =(struct in_pktinfo *)CMSG_DATA(cmsg);
     memset(pktinfo, 0, sizeof(struct in_pktinfo));
     pktinfo->ipi_ifindex = pkt->getIndex();
+#ifndef __CYGWIN__
     pktinfo->ipi_spec_dst.s_addr = htonl(pkt->getLocalAddr()); // set the source IP address
+#endif
     m.msg_controllen = CMSG_SPACE(sizeof(struct in_pktinfo));
 #endif
 

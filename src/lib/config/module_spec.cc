@@ -4,6 +4,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#ifdef __CYGWIN__
+#undef __STRICT_ANSI__
+#define _XOPEN_SOURCE
+#include <time.h>
+#endif // if defined(__CYGWIN__)
+
 #include <config/module_spec.h>
 
 #include <sstream>
