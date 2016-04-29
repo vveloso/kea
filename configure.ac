@@ -357,7 +357,8 @@ fi
 
 # produce PIC unless we disable shared libraries. need this for python bindings.
 if test $enable_shared != "no" -a "X$GXX" = "Xyes"; then
-   KEA_CXXFLAGS="$KEA_CXXFLAGS -fPIC"
+#    KEA_CXXFLAGS="$KEA_CXXFLAGS -fPIC"
+    KEA_CXXFLAGS="$KEA_CXXFLAGS"
 fi
 
 AC_SUBST(KEA_CXXFLAGS)
@@ -381,7 +382,7 @@ AC_TYPE_SIZE_T
 AC_MSG_CHECKING(OS type)
 BSD_TYPE="notaBSD"
 case $host in
-    *-linux*)
+    *-linux*|*cygwin*)
       AC_DEFINE([OS_LINUX], [1], [Running on Linux?])
       OS_TYPE="Linux"
       CPPFLAGS="$CPPFLAGS -DOS_LINUX"
@@ -1358,6 +1359,19 @@ AM_CONDITIONAL(HAVE_OPTRESET, test "x$var_optreset_exists" != "xno")
 AM_COND_IF([HAVE_OPTRESET], [AC_DEFINE([HAVE_OPTRESET], [1], [Check for optreset?])])
 
 AC_DEFINE([CONFIG_H_WAS_INCLUDED], [1], [config.h inclusion marker])
+
+AC_MSG_CHECKING([if libtool needs -no-undefined flag to build shared libraries])
+case "`uname`" in
+  CYGWIN*|MINGW*|AIX*)
+    ## Add in the -no-undefined flag to LDFLAGS for libtool.
+    AC_MSG_RESULT([yes])
+    LDFLAGS="$LDFLAGS -no-undefined"
+    ;;
+  *)
+    ## Don't add in anything.
+    AC_MSG_RESULT([no])
+    ;;
+esac
 
 AC_CONFIG_FILES([compatcheck/Makefile
                  dns++.pc

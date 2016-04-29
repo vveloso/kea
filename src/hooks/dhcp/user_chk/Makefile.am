@@ -58,7 +58,7 @@ noinst_LTLIBRARIES += libdhcp_user_chk.la
 
 libdhcp_user_chk_la_SOURCES  =
 libdhcp_user_chk_la_LDFLAGS  = $(AM_LDFLAGS)
-libdhcp_user_chk_la_LDFLAGS  += -avoid-version -export-dynamic -module
+libdhcp_user_chk_la_LDFLAGS  += -avoid-version -export-dynamic -module -lstdc++ -lboost_system
 # -rpath /nowhere is a hack to trigger libtool to not create a
 # convenience archive, resulting in shared modules
 libdhcp_user_chk_la_LDFLAGS  += -rpath /nowhere
@@ -68,4 +68,6 @@ libdhcp_user_chk_la_LIBADD  += $(top_builddir)/src/lib/log/libkea-log.la
 libdhcp_user_chk_la_LIBADD  += $(top_builddir)/src/lib/util/threads/libkea-threads.la
 libdhcp_user_chk_la_LIBADD  += $(top_builddir)/src/lib/util/libkea-util.la
 libdhcp_user_chk_la_LIBADD  += $(top_builddir)/src/lib/exceptions/libkea-exceptions.la
+libdhcp_user_chk_la_LIBADD  += $(top_builddir)/src/lib/dhcp/libkea-dhcp++.la
+libdhcp_user_chk_la_LIBADD  += $(top_builddir)/src/lib/cc/libkea-cc.la
 libdhcp_user_chk_la_LIBADD  += $(LOG4CPLUS_LIBS)
