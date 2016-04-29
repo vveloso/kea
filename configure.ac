@@ -178,6 +178,10 @@ KEA_CXX_TRY_FLAG([-Wno-missing-field-initializers],
 	[WARNING_NO_MISSING_FIELD_INITIALIZERS_CFLAG="-Wno-missing-field-initializers"])
 AC_SUBST(WARNING_NO_MISSING_FIELD_INITIALIZERS_CFLAG)
 
+KEA_CXX_TRY_FLAG([-Wno-unused-value],
+	[WARNING_NO_UNUSED_VALUE_CFLAG="-Wno-unused-value"])
+AC_SUBST(WARNING_NO_UNUSED_VALUE_CFLAG)
+
 # gcc specific settings:
 if test "X$GXX" = "Xyes"; then
 CXX_VERSION=`$CXX --version 2> /dev/null | head -1`
@@ -355,11 +359,17 @@ else
 	AC_SUBST(pkgpyexecdir)
 fi
 
-# produce PIC unless we disable shared libraries. need this for python bindings.
-if test $enable_shared != "no" -a "X$GXX" = "Xyes"; then
-#    KEA_CXXFLAGS="$KEA_CXXFLAGS -fPIC"
-    KEA_CXXFLAGS="$KEA_CXXFLAGS"
-fi
+case $host in
+    *cygwin*)
+	  KEA_CXXFLAGS="$KEA_CXXFLAGS -D_DEFAULT_SOURCE"
+      ;;
+	*)
+      # produce PIC unless we disable shared libraries. need this for python bindings.
+      if test $enable_shared != "no" -a "X$GXX" = "Xyes"; then
+	      KEA_CXXFLAGS="$KEA_CXXFLAGS -fPIC"
+      fi
+	  ;;
+esac
 
 AC_SUBST(KEA_CXXFLAGS)
 

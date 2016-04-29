@@ -17,6 +17,12 @@ AM_CXXFLAGS += $(WARNING_NO_MISSING_FIELD_INITIALIZERS_CFLAG)
 # Disabling the strict aliasing rule suppresses this warning.
 AM_CXXFLAGS += $(WARNING_GCC_44_STRICT_ALIASING_CFLAG)
 
+# GCC complains on the Flex output having statements with no
+# effect. Apparently this is due to the unconditional returns 
+# not allowing the "break" statements to be reached.
+# Suppressing the unused value warning allows compilation.
+AM_CXXFLAGS += $(WARNING_NO_UNUSED_VALUE_CFLAG)
+
 lib_LTLIBRARIES = libkea-eval.la
 libkea_eval_la_SOURCES  =
 libkea_eval_la_SOURCES += eval_log.cc eval_log.h
