@@ -55,7 +55,7 @@ IfaceMgr::detectIfaces() {
 }
 
 void
-IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired) {
+IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired __attribute__((unused))) {
 	setPacketFilter(PktFilterPtr(new PktFilterInet()));
 }
 
