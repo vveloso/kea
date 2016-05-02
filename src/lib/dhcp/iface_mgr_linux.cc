@@ -44,31 +44,14 @@ using namespace isc::asiolink;
 using namespace isc::dhcp;
 using namespace isc::util::io::internal;
 
-#if defined(__CYGWIN__)
-
-namespace isc {
-namespace dhcp {
-
-void
-IfaceMgr::detectIfaces() {
-	stubDetectIfaces();
-}
-
-void
-IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired __attribute__((unused))) {
-	setPacketFilter(PktFilterPtr(new PktFilterInet()));
-}
-
-} // end of isc::dhcp namespace
-} // end of isc namespace
-
-#else
+#if ! defined(__CYGWIN__)
 
 #include <linux/rtnetlink.h>
 
 BOOST_STATIC_ASSERT(IFLA_MAX>=IFA_MAX);
 
 namespace {
+
 
 /// @brief This class offers utility methods for netlink connection.
 ///
@@ -515,22 +498,6 @@ void IfaceMgr::detectIfaces() {
     nl.release_list(addr_info);
 }
 
-/// @brief sets flag_*_ fields.
-///
-/// This implementation is OS-specific as bits have different meaning
-/// on different OSes.
-///
-/// @param flags flags bitfield read from OS
-void Iface::setFlags(uint64_t flags) {
-    flags_ = flags;
-
-    flag_loopback_ = flags & IFF_LOOPBACK;
-    flag_up_ = flags & IFF_UP;
-    flag_running_ = flags & IFF_RUNNING;
-    flag_multicast_ = flags & IFF_MULTICAST;
-    flag_broadcast_ = flags & IFF_BROADCAST;
-}
-
 void
 IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired) {
     if (direct_response_desired) {
@@ -545,7 +512,7 @@ IfaceMgr::setMatchingPacketFilter(const bool direct_response_desired) {
 } // end of isc::dhcp namespace
 } // end of isc namespace
 
-#endif // #if defined(__CYGWIN__)
+#endif // if ! defined(__CYGWIN__)
 
 namespace isc {
 namespace dhcp {
@@ -613,6 +580,22 @@ IfaceMgr::openSocket6(Iface& iface, const IOAddress& addr, uint16_t port,
     iface.addSocket(info);
 
     return (info.sockfd_);
+}
+
+/// @brief sets flag_*_ fields.
+///
+/// This implementation is OS-specific as bits have different meaning
+/// on different OSes.
+///
+/// @param flags flags bitfield read from OS
+void Iface::setFlags(uint64_t flags) {
+    flags_ = flags;
+
+    flag_loopback_ = flags & IFF_LOOPBACK;
+    flag_up_ = flags & IFF_UP;
+    flag_running_ = flags & IFF_RUNNING;
+    flag_multicast_ = flags & IFF_MULTICAST;
+    flag_broadcast_ = flags & IFF_BROADCAST;
 }
 
 } // end of isc::dhcp namespace
