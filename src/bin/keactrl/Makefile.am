@@ -35,7 +35,7 @@ kea.conf: kea.conf.pre
 if INSTALL_CONFIGURATIONS
 
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)/@sysconfdir@/@PACKAGE@
+	$(mkinstalldirs) $(DESTDIR)@sysconfdir@/@PACKAGE@
 	for f in $(CONFIGFILES) ; do	\
 	  if test ! -f $(DESTDIR)$(sysconfdir)/@PACKAGE@/$$f; then	\
 	    ${INSTALL_DATA} $$f $(DESTDIR)$(sysconfdir)/@PACKAGE@/ ;	\
